@@ -1,14 +1,10 @@
 <template>
   <div class="choice">
-    <select v-model="selectedCompany" @change="getStock(selectedCompany, '1m')">
-      <option
-        v-for="company in companies"
-        v-bind:key="company.symbol"
-        v-bind:value="company.symbol">
-        {{ company.name }}
-      </option>
-    </select>
-    Selected: {{ selectedCompany }}
+    <autocomplete
+      :suggestions="companies"
+      v-model="selectedCompany"
+      @change="getStock(selectedCompany, '1m')">
+    </autocomplete>
     <div class="stock" v-if="stock">
       <line-chart :data="stock"></line-chart>
     </div>
@@ -25,6 +21,7 @@
 
 <script>
 import TradingService from '../services/TradingService'
+import Autocomplete from './Autocomplete'
 export default {
   name: 'Trading',
   data() {
@@ -33,6 +30,9 @@ export default {
       selectedCompany: "",
       stock: null
     }
+  },
+  components: {
+    Autocomplete
   },
   created: function() {
     this.getCompanies();
